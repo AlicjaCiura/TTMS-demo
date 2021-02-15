@@ -11,12 +11,12 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice
-public class Exception {
+public class Exception extends Throwable {
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity handle(ConstraintViolationException constraintViolationException) {
+    public ResponseEntity<String> handle(ConstraintViolationException constraintViolationException) {
         Set<ConstraintViolation<?>> violations = constraintViolationException.getConstraintViolations();
-        String errorMessage = "";
+        String errorMessage;
         if (!violations.isEmpty()) {
             StringBuilder builder = new StringBuilder();
             violations.forEach(violation -> builder.append(" ").append(violation.getMessage()));

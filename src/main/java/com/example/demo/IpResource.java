@@ -2,6 +2,8 @@ package com.example.demo;
 
 import com.example.demo.validations.ValidationMaxSize;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,15 +24,19 @@ import lombok.Getter;
 @Validated
 public class IpResource {
 
-    private static final String IP_RESOURCE_URL = "http://ip-api.com/json/";
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    //@Value("${ip.api.ur}")
+    private static final String URL_IP_API = "http://ip-api.com/json/";
+
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @GetMapping("/north-countries")
     public CountriesDto getCountries(
             @RequestParam @Valid @NotEmpty(message = "Input movie list cannot be empty.") @ValidationMaxSize.MaxSizeConstraint List<String> ip) {
-
-        RestTemplate restTemplate = new RestTemplate();
+        logger.info("/north-countries: {}", ip);
         List<String> countries = ip.stream()//
-                .map(i -> restTemplate.getForObject(IP_RESOURCE_URL + i, CountryData.class))//
+                .map(i -> restTemplate.getForObject(URL_IP_API + i, CountryData.class))//
                 .filter(Objects::nonNull)//
                 .filter(CountryData::isNorthCountry)//
                 .map(CountryData::getCountry).distinct()//
@@ -41,7 +47,7 @@ public class IpResource {
     }
 
     @AllArgsConstructor(staticName = "of")
-    private static class CountriesDto {
+    public static class CountriesDto {
         @Getter
         private final List<String> northcountries;
     }

@@ -11,16 +11,20 @@ import javax.validation.ConstraintValidatorContext;
 
 public class ValidationMaxSize {
 
+    public static final int MAX_SIZE = 5;
+
     @Constraint(validatedBy = MaxSizeConstraintValidator.class)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface MaxSizeConstraint {
         String message() default "The input list cannot contain more than 5 addresses.";
+        Class<?>[] groups() default {};
+        Class<? extends String>[] payload() default {};
     }
 
     public static class MaxSizeConstraintValidator implements ConstraintValidator<MaxSizeConstraint, List<String>> {
         @Override
         public boolean isValid(List<String> values, ConstraintValidatorContext context) {
-            return values.size() <= 5;
+            return values.size() <= MAX_SIZE;
         }
     }
 }
