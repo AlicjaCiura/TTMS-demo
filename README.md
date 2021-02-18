@@ -11,6 +11,8 @@ Application have one endpoint */north-countries* which can accept ip list. The l
 
 `./mvnw spring-boot:run`
 
+or from file jar, after `mvn clean install`. This file is in these path: path_to_projec\demo\target.
+
 2. Automated test can run by command:
 ```
 mvn clean
